@@ -1,0 +1,43 @@
+# Provide a api key
+namespace: hello-world
+
+ingress:
+  configured: false
+  rewritePath: true
+  pathPrefix: ""
+
+service:
+  type: NodePort
+  port: 8080
+
+secrets:
+  name: "hello-world"
+
+deployment:
+  replicaCount: 2
+  container:
+    image:
+      repository: "nginxdemos/hello"
+      tag: "latest"
+      pullPolicy: IfNotPresent
+    port: 80
+  
+  nodeSelector:
+    kubernetes.io/os: linux
+    kubernetes.io/arch: amd64
+
+  resources: {}
+
+  tolerations: []
+
+  affinity: {}
+
+hpa:
+  minReplicaCount: 2
+  maxReplicaCount: 10
+  targetAverageUtilization: 50
+
+role:
+  name: readonly
+  binding:
+    name: readonlybinding
